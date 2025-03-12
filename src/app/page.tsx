@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { getProducts } from "../lib/shopify";
 
 export default async function Home() {
@@ -9,17 +10,21 @@ export default async function Home() {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {products.map((product) => (
           <div key={product.id} className="bg-white shadow-lg rounded-lg overflow-hidden border">
-            <img
+            <Link href={`/product/${product.id.split("/").pop()}`}>
+              <img
                 src={product.image}
                 alt={product.title}
-              className="w-full h-56 object-cover"
-            />
+                className="w-full h-56 object-cover cursor-pointer"
+              />
+            </Link>
             <div className="p-4">
-              <h2 className="text-lg font-semibold text-gray-900">{product.title}</h2>
+              <Link href={`/product/${product.id.split("/").pop()}`}>
+                <h2 className="text-lg font-semibold text-gray-900 hover:text-blue-600 cursor-pointer">
+                  {product.title}
+                </h2>
+              </Link>
               <p className="text-sm text-gray-600 mt-2 line-clamp-2">{product.description}</p>
-              <p className="text-md font-bold text-gray-800 mt-2">
-                ${product.price}
-              </p>
+              <p className="text-md font-bold text-gray-800 mt-2">${product.price}</p>
               <button className="mt-4 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition">
                 Add to Cart
               </button>
