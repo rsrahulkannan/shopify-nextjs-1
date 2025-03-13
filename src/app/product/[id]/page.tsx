@@ -1,6 +1,12 @@
 import { getProductById } from "@/lib/shopify";
 
 export default async function ProductPage({ params }: { params: { id: string } }) {
+    // Fetch cartId from API Route
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/cart`, {
+        cache: "no-store",
+    });
+    const { cartId } = await response.json();
+
     const product = await getProductById(params.id);
 
     return (
