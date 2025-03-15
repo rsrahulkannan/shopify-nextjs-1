@@ -163,3 +163,65 @@ export async function createCart(product: { merchandiseId: string; quantity: num
   const jsonResponse = await response.json();
   return jsonResponse.data.cartCreate.cart;
 }
+
+export async function getCart(cartId: string) {
+  if (!domain || !apiVersion || !accessToken) {
+    throw new Error("Missing Shopify environment variables!");
+  }
+
+  const query = `
+    query GetCart($cartId: ID!) {
+      cart(id: $cartId) {
+        id
+        lines(first: 10) {
+          edges {
+            node {
+              id
+              quantity
+              merchandise {
+                ... on ProductVariant {
+                  id
+                  title
+                  product {
+                    title
+                    featuredImage {
+                      url
+                    }
+                  }
+                  priceV2 {
+                    amount
+                    currencyCode
+                  }
+                }
+              }
+            }
+          }
+        }
+        cost {
+          totalAmount {
+            amount
+            currencyCode
+          }
+        }
+      }
+    }
+  `;
+
+  const variables = { cartId };
+
+  const response = await fetch(`https://${domain}/api/${apiVersion}/graphql.json`, {
+    method: "POST",
+    headers: {
+      "X-Shopify-Storefront-Access-Token": accessToken,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ query, variables }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Shopify API request failed: ${response.statusText}`);
+  }
+
+  const jsonResponse = await response.json();
+  return jsonResponse.data.cart;
+}
