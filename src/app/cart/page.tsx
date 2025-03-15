@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { getCart, updateCartQuantity, removeFromCart } from "@/lib/shopify";
 import { FaTrash } from "react-icons/fa";
 import Link from "next/link";
-import CartButton from "../CartButton";
-import CheckoutButton from "./CheckoutButton";
+import CartButton from "../../components/CartButton";
+import CheckoutButton from "../../components/CheckoutButton";
 
 export default function CartPage() {
   const [cart, setCart] = useState<any>(null);

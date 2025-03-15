@@ -1,8 +1,7 @@
 import Link from "next/link";
 import { getProducts } from "../lib/shopify";
-import AddToCartButton from "./product/[id]/AddToCartButton";
-import { FaShoppingCart } from "react-icons/fa"; // Import cart icon from React Icons
-import CartButton from "./CartButton";
+import AddToCartButton from "../components/AddToCartButton";
+import CartButton from "../components/CartButton";
 
 export default async function Home({
   searchParams,

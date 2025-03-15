@@ -1,7 +1,7 @@
 import { getProductById } from "@/lib/shopify";
-import AddToCartButton from "./AddToCartButton";
+import AddToCartButton from "../../../components/AddToCartButton";
 import Link from "next/link";
-import CartButton from "@/app/CartButton";
+import CartButton from "@/components/CartButton";
 
 export default async function ProductPage({ params }: { params: { id: string } }) {
   const product = await getProductById(params.id);
