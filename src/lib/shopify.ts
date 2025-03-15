@@ -102,38 +102,52 @@ export async function getProductById(id: string) {
   const jsonResponse = await response.json();
   return jsonResponse;
 }
-
 export async function createCart(product: { merchandiseId: string; quantity: number }) {
   const query = `
-  mutation CreateCart($input: CartInput!) {
-    cartCreate(input: $input) {
-      cart {
-        id
-        createdAt
-        updatedAt
-        lines(first: 10) {
-          edges {
-            node {
-              id
-              quantity
-              merchandise {
-                ... on ProductVariant {
-                  id
+    mutation CreateCart($input: CartInput!) {
+      cartCreate(input: $input) {
+        cart {
+          id
+          createdAt
+          updatedAt
+          lines(first: 10) {
+            edges {
+              node {
+                id
+                quantity
+                merchandise {
+                  ... on ProductVariant {
+                    id
+                    title
+                    priceV2 {
+                      amount
+                      currencyCode
+                    }
+                    product {
+                      title
+                      featuredImage {
+                        url
+                      }
+                    }
+                  }
                 }
               }
             }
           }
-        }
-        cost {
-          totalAmount {
-            amount
-            currencyCode
+          cost {
+            totalAmount {
+              amount
+              currencyCode
+            }
           }
+        }
+        userErrors {
+          field
+          message
         }
       }
     }
-  }
-`;
+  `;
 
   const variables = {
     input: {
@@ -145,23 +159,36 @@ export async function createCart(product: { merchandiseId: string; quantity: num
       ],
     },
   };
-  console.log(`https://${domain}/api/${apiVersion}/graphql.json`);
-  
-  const response = await fetch(`https://${domain}/api/${apiVersion}/graphql.json`, {
-    method: "POST",
-    headers: {
-      "X-Shopify-Storefront-Access-Token": accessToken as string,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ query, variables }),
-  });
 
-  if (!response.ok) {
-    throw new Error(`Shopify API request failed: ${response.statusText}`);
+  try {
+    const response = await fetch(`https://${domain}/api/${apiVersion}/graphql.json`, {
+      method: "POST",
+      headers: {
+        "X-Shopify-Storefront-Access-Token": accessToken as string,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ query, variables }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Shopify API request failed: ${response.statusText}`);
+    }
+
+    const jsonResponse = await response.json();
+
+    // Check for user errors returned by Shopify
+    if (jsonResponse.errors || jsonResponse.data.cartCreate.userErrors?.length > 0) {
+      const errors = jsonResponse.errors || jsonResponse.data.cartCreate.userErrors;
+      console.error("GraphQL Errors:", errors);
+      throw new Error(errors.map((err: any) => err.message).join(", "));
+    }
+
+    // Return the created cart
+    return jsonResponse.data.cartCreate.cart;
+  } catch (error) {
+    console.error("Error creating cart:", error);
+    throw error;
   }
-
-  const jsonResponse = await response.json();
-  return jsonResponse.data.cartCreate.cart;
 }
 
 export async function getCart(cartId: string) {
@@ -284,4 +311,90 @@ export async function updateCartQuantity(cartId: string, lineId: string, quantit
 
   const jsonResponse = await response.json();
   return jsonResponse.data.cartLinesUpdate.cart;
+}
+
+export async function updateCart(cartId: string, merchandiseId: string, quantity: number) {
+  const query = `
+    mutation cartLinesAdd($cartId: ID!, $lines: [CartLineInput!]!) {
+      cartLinesAdd(cartId: $cartId, lines: $lines) {
+        cart {
+          id
+          lines(first: 10) {
+            edges {
+              node {
+                id
+                quantity
+                merchandise {
+                  ... on ProductVariant {
+                    id
+                    title
+                    priceV2 {
+                      amount
+                      currencyCode
+                    }
+                    product {
+                      title
+                      featuredImage {
+                        url
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+          cost {
+            totalAmount {
+              amount
+              currencyCode
+            }
+          }
+        }
+        userErrors {
+          field
+          message
+        }
+      }
+    }
+  `;
+
+  const variables = {
+    cartId,
+    lines: [
+      {
+        merchandiseId,
+        quantity,
+      },
+    ],
+  };
+
+  try {
+    const response = await fetch(`https://${domain}/api/${apiVersion}/graphql.json`, {
+      method: "POST",
+      headers: {
+        "X-Shopify-Storefront-Access-Token": accessToken as string,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ query, variables }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Shopify API request failed: ${response.statusText}`);
+    }
+
+    const jsonResponse = await response.json();
+
+    // Check for user errors returned by Shopify
+    if (jsonResponse.errors || jsonResponse.data.cartLinesAdd.userErrors?.length > 0) {
+      const errors = jsonResponse.errors || jsonResponse.data.cartLinesAdd.userErrors;
+      console.error("GraphQL Errors:", errors);
+      throw new Error(errors.map((err: any) => err.message).join(", "));
+    }
+
+    // Return the updated cart
+    return jsonResponse.data.cartLinesAdd.cart;
+  } catch (error) {
+    console.error("Error updating cart:", error);
+    throw error;
+  }
 }
