@@ -4,6 +4,7 @@ import { getCart, updateCartQuantity, removeFromCart } from "@/lib/shopify";
 import { FaTrash } from "react-icons/fa";
 import Link from "next/link";
 import CartButton from "../CartButton";
+import CheckoutButton from "./CheckoutButton";
 
 export default function CartPage() {
   const [cart, setCart] = useState<any>(null);
@@ -123,6 +124,7 @@ export default function CartPage() {
       <h2 className="text-2xl font-bold mt-6">
         Total: ${cart.cost?.totalAmount?.amount || "0.00"} {cart.cost?.totalAmount?.currencyCode || ""}
       </h2>
+      <CheckoutButton />
     </div>
   );
 }
