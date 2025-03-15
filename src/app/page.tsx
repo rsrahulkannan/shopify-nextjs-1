@@ -1,5 +1,8 @@
 import Link from "next/link";
 import { getProducts } from "../lib/shopify";
+import AddToCartButton from "./product/[id]/AddToCartButton";
+import { FaShoppingCart } from "react-icons/fa"; // Import cart icon from React Icons
+import CartButton from "./CartButton";
 
 export default async function Home({
   searchParams,
@@ -9,11 +12,17 @@ export default async function Home({
   const searchQuery = searchParams.search || '';
 
   // Fetch products with the search query
-  const products = await getProducts({ searchQuery });
+  const response = await getProducts({ searchQuery });
+  const products = response.data.products.edges;
+  console.log(products);
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-center text-gray-800 mb-8">Shopify Store</h1>
+      {/* Header with Cart Icon */}
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold text-gray-800">Shopify Store</h1>
+        <CartButton />
+      </div>
 
       {/* Search Box */}
       <div className="mb-8">
@@ -30,25 +39,23 @@ export default async function Home({
       {/* Product Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {products.map((product) => (
-          <div key={product.id} className="bg-white shadow-lg rounded-lg overflow-hidden border">
-            <Link href={`/product/${product.id.split("/").pop()}`}>
+          <div key={product.node.id} className="bg-white shadow-lg rounded-lg overflow-hidden border">
+            <Link href={`/product/${product.node.id.split("/").pop()}`}>
               <img
-                src={product.image}
-                alt={product.title}
+                src={product.node.featuredImage.url}
+                alt={product.node.title}
                 className="w-full h-56 object-cover cursor-pointer"
               />
             </Link>
             <div className="p-4">
-              <Link href={`/product/${product.id.split("/").pop()}`}>
+              <Link href={`/product/${product.node.id.split("/").pop()}`}>
                 <h2 className="text-lg font-semibold text-gray-900 hover:text-blue-600 cursor-pointer">
-                  {product.title}
+                  {product.node.title}
                 </h2>
               </Link>
-              <p className="text-sm text-gray-600 mt-2 line-clamp-2">{product.description}</p>
-              <p className="text-md font-bold text-gray-800 mt-2">${product.price}</p>
-              <button className="mt-4 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition">
-                Add to Cart
-              </button>
+              <p className="text-sm text-gray-600 mt-2 line-clamp-2">{product.node.description}</p>
+              <p className="text-md font-bold text-gray-800 mt-2">${product.node.priceRange.minVariantPrice.amount}</p>
+              <AddToCartButton productId={product.node.variants.edges[0]?.node.id} />
             </div>
           </div>
         ))}

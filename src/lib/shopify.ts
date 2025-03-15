@@ -23,6 +23,15 @@ export async function getProducts({
                 amount
               }
             }
+            ... on Product {
+              variants(first: 5) {
+                edges {
+                  node {
+                    id
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -42,6 +51,7 @@ export async function getProducts({
   }
 
   const jsonResponse = await response.json();
+  return jsonResponse;
   return jsonResponse.data.products.edges.map(({ node }: any) => ({
     id: node.id,
     title: node.title,
