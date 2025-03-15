@@ -2,20 +2,16 @@
 import { getCart } from "@/lib/cart";
 import { createContext, useContext, useState, useEffect } from "react";
 
-// Define the context type
 type CartContextType = {
     cartCount: number;
     updateCartCount: () => void;
 };
 
-// Create the context
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-// Create a provider component
 export function CartProvider({ children }: { children: React.ReactNode }) {
     const [cartCount, setCartCount] = useState(0);
 
-    // Function to fetch and update the cart count
     const updateCartCount = async () => {
         const cartId = localStorage.getItem("cartId");
         if (!cartId) {
@@ -30,7 +26,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         }
     };
 
-    // Fetch the cart count on initial load
     useEffect(() => {
         updateCartCount();
     }, []);
@@ -42,7 +37,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     );
 }
 
-// Custom hook to use the cart context
 export function useCart() {
     const context = useContext(CartContext);
     if (!context) {

@@ -72,11 +72,11 @@ export default function CartPage() {
       </div>
       <div className="space-y-4">
         {cart.lines.edges.map(({ node }: any) => {
-          const product = node.merchandise?.product || {}; // Ensure product exists
-          const featuredImage = product.featuredImage || {}; // Ensure featuredImage exists
-          const title = product.title || "Unknown Product"; // Fallback for title
-          const variantTitle = node.merchandise?.title || "No Variant"; // Fallback for variant title
-          const price = node.merchandise?.priceV2?.amount || "0.00"; // Fallback for price
+          const product = node.merchandise?.product || {};
+          const featuredImage = product.featuredImage || {}; 
+          const title = product.title || "Unknown Product";
+          const variantTitle = node.merchandise?.title || "No Variant";
+          const price = node.merchandise?.priceV2?.amount || "0.00";
 
           return (
             <div key={node.id} className="flex items-center border p-4 rounded-md">

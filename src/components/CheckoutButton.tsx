@@ -14,19 +14,15 @@ export default function CheckoutButton() {
         return;
       }
 
-      // Fetch the cart data
       const cartData = await getCart(cartId);
 
-      // Prepare line items for checkout
       const lineItems = cartData.lines.edges.map(({ node }: any) => ({
         merchandiseId: node.merchandise.id,
         quantity: node.quantity,
       }));
 
-      // Create the checkout
       const checkoutUrl = await createCheckout(lineItems);
 
-      // Redirect to the Shopify checkout page
       window.location.href = checkoutUrl;
     } catch (error) {
       console.error("Error during checkout:", error);

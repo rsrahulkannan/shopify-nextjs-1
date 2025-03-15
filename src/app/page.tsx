@@ -10,7 +10,6 @@ export default async function Home({
 }) {
   const searchQuery = searchParams.search || '';
 
-  // Fetch products with the search query
   const response = await getProducts({ searchQuery });
   const products = response.data.products.edges;
 
