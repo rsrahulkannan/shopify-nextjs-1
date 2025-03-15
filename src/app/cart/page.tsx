@@ -2,6 +2,8 @@
 import { useEffect, useState } from "react";
 import { getCart, updateCartQuantity, removeFromCart } from "@/lib/shopify";
 import { FaTrash } from "react-icons/fa";
+import Link from "next/link";
+import CartButton from "../CartButton";
 
 export default function CartPage() {
   const [cart, setCart] = useState<any>(null);
@@ -60,7 +62,13 @@ export default function CartPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-4">Shopping Cart</h1>
+      <div className="flex justify-between items-center mb-8">
+        <Link href="/">
+          <h1 className="text-3xl font-bold text-gray-800">Shopify Store</h1>
+        </Link>
+        <h1 className="text-3xl font-bold mb-4">My Cart</h1>
+        <CartButton />
+      </div>
       <div className="space-y-4">
         {cart.lines.edges.map(({ node }: any) => {
           const product = node.merchandise?.product || {}; // Ensure product exists

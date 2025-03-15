@@ -1,23 +1,26 @@
 "use client";
-import { createCart, updateCart } from "@/lib/shopify"; // Import updateCart function
+import { useCart } from "@/context/CartContext";
+import { createCart, updateCart } from "@/lib/shopify";
 
 export default function AddToCartButton({ productId }: { productId: string }) {
+  const { updateCartCount } = useCart();
+
   const handleAddToCart = async () => {
     try {
       const cartId = localStorage.getItem("cartId");
 
       if (cartId) {
-        // If cartId exists, update the existing cart
-        const updatedCart = await updateCart(cartId, productId, 1); // Add 1 quantity of the product
+        const updatedCart = await updateCart(cartId, productId, 1); 
         console.log("Cart Updated:", updatedCart);
       } else {
-        // If cartId does not exist, create a new cart
         const cart = await createCart({ merchandiseId: productId, quantity: 1 });
         if (cart.id) {
           localStorage.setItem("cartId", cart.id);
           console.log("Cart Created:", cart);
         }
       }
+
+      updateCartCount();
     } catch (error) {
       console.error("Error adding to cart:", error);
     }

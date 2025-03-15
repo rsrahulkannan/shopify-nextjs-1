@@ -18,9 +18,10 @@ export default async function Home({
 
   return (
     <div className="container mx-auto px-4 py-8">
-      {/* Header with Cart Icon */}
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-800">Shopify Store</h1>
+        <Link href="/">
+          <h1 className="text-3xl font-bold text-gray-800">Shopify Store</h1>
+        </Link>
         <CartButton />
       </div>
 
