@@ -1,6 +1,6 @@
 "use client";
+import { getCart } from "@/lib/cart";
 import { createContext, useContext, useState, useEffect } from "react";
-import { getCart } from "@/lib/shopify";
 
 // Define the context type
 type CartContextType = {

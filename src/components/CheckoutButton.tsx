@@ -1,6 +1,7 @@
 "use client";
 import { useCart } from "@/context/CartContext";
-import { createCheckout, getCart } from "@/lib/shopify";
+import { getCart } from "@/lib/cart";
+import { createCheckout } from "@/lib/checkout";
 
 export default function CheckoutButton() {
   const { cartCount } = useCart();

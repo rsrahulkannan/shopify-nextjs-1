@@ -1,10 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
-import { getCart, updateCartQuantity, removeFromCart } from "@/lib/shopify";
 import { FaTrash } from "react-icons/fa";
 import Link from "next/link";
 import CartButton from "../../components/CartButton";
 import CheckoutButton from "../../components/CheckoutButton";
+import { getCart, removeFromCart, updateCartQuantity } from "@/lib/cart";
 
 export default function CartPage() {
   const [cart, setCart] = useState<any>(null);

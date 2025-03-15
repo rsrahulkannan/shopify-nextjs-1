@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { getProducts } from "../lib/shopify";
 import AddToCartButton from "../components/AddToCartButton";
 import CartButton from "../components/CartButton";
+import { getProducts } from "@/lib/product";
 
 export default async function Home({
   searchParams,
@@ -13,7 +13,6 @@ export default async function Home({
   // Fetch products with the search query
   const response = await getProducts({ searchQuery });
   const products = response.data.products.edges;
-  console.log(products);
 
   return (
     <div className="container mx-auto px-4 py-8">

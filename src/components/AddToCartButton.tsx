@@ -1,6 +1,6 @@
 "use client";
 import { useCart } from "@/context/CartContext";
-import { createCart, updateCart } from "@/lib/shopify";
+import { createCart, updateCart } from "@/lib/cart";
 
 export default function AddToCartButton({ productId }: { productId: string }) {
   const { updateCartCount } = useCart();
@@ -11,12 +11,10 @@ export default function AddToCartButton({ productId }: { productId: string }) {
 
       if (cartId) {
         const updatedCart = await updateCart(cartId, productId, 1); 
-        console.log("Cart Updated:", updatedCart);
       } else {
         const cart = await createCart({ merchandiseId: productId, quantity: 1 });
         if (cart.id) {
           localStorage.setItem("cartId", cart.id);
-          console.log("Cart Created:", cart);
         }
       }
 
