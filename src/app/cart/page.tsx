@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
-import { getCart, updateCartQuantity } from "@/lib/shopify";
+import { getCart, updateCartQuantity, removeFromCart } from "@/lib/shopify";
+import { FaTrash } from "react-icons/fa";
 
 export default function CartPage() {
   const [cart, setCart] = useState<any>(null);
@@ -38,6 +39,18 @@ export default function CartPage() {
       setCart(updatedCart);
     } catch (error) {
       console.error("Error updating quantity:", error);
+    }
+  };
+
+  const handleRemoveFromCart = async (lineId: string) => {
+    const cartId = localStorage.getItem("cartId");
+    if (!cartId) return;
+
+    try {
+      const updatedCart = await removeFromCart(cartId, lineId);
+      setCart(updatedCart);
+    } catch (error) {
+      console.error("Error removing item from cart:", error);
     }
   };
 
@@ -87,6 +100,12 @@ export default function CartPage() {
                   className="px-3 py-1 bg-gray-300 rounded-md"
                 >
                   +
+                </button>
+                <button
+                  onClick={() => handleRemoveFromCart(node.id)}
+                  className="ml-4 px-3 py-2 bg-red-800 text-white rounded-md hover:bg-red-600"
+                >
+                  <FaTrash />
                 </button>
               </div>
             </div>
