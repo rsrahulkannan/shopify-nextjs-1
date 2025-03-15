@@ -165,10 +165,6 @@ export async function createCart(product: { merchandiseId: string; quantity: num
 }
 
 export async function getCart(cartId: string) {
-  if (!domain || !apiVersion || !accessToken) {
-    throw new Error("Missing Shopify environment variables!");
-  }
-
   const query = `
     query GetCart($cartId: ID!) {
       cart(id: $cartId) {
@@ -224,4 +220,68 @@ export async function getCart(cartId: string) {
 
   const jsonResponse = await response.json();
   return jsonResponse.data.cart;
+}
+
+export async function updateCartQuantity(cartId: string, lineId: string, quantity: number) {
+  const query = `
+    mutation cartLinesUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
+      cartLinesUpdate(cartId: $cartId, lines: $lines) {
+        cart {
+          id
+          cost {
+            totalAmount {
+              amount
+              currencyCode
+            }
+          }
+          lines(first: 10) {
+            edges {
+              node {
+                id
+                quantity
+                merchandise {
+                  ... on ProductVariant {
+                    id
+                    title
+                    priceV2 {
+                      amount
+                      currencyCode
+                    }
+                    product {
+                      title
+                      featuredImage {
+                        url
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  const response = await fetch(`https://${domain}/api/${apiVersion}/graphql.json`, {
+    method: "POST",
+    headers: {
+      "X-Shopify-Storefront-Access-Token": accessToken,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      query,
+      variables: {
+        cartId,
+        lines: [{ id: lineId, quantity }],
+      },
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Shopify API request failed: ${response.statusText}`);
+  }
+
+  const jsonResponse = await response.json();
+  return jsonResponse.data.cartLinesUpdate.cart;
 }

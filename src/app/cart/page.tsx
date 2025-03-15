@@ -1,12 +1,15 @@
 "use client";
 import { useEffect, useState } from "react";
-import { getCart } from "@/lib/shopify";
+import { getCart, updateCartQuantity } from "@/lib/shopify";
 
 export default function CartPage() {
   const [cart, setCart] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    setIsClient(true);
+
     const fetchCart = async () => {
       const cartId = localStorage.getItem("cartId");
       if (!cartId) {
@@ -15,8 +18,6 @@ export default function CartPage() {
       }
       try {
         const cartData = await getCart(cartId);
-        console.log(cartData);
-        
         setCart(cartData);
       } catch (error) {
         console.error("Error fetching cart:", error);
@@ -27,35 +28,73 @@ export default function CartPage() {
     fetchCart();
   }, []);
 
+  const handleQuantityChange = async (lineId: string, newQuantity: number) => {
+    if (newQuantity < 1) return;
+    const cartId = localStorage.getItem("cartId");
+    if (!cartId) return;
+
+    try {
+      const updatedCart = await updateCartQuantity(cartId, lineId, newQuantity);
+      setCart(updatedCart);
+    } catch (error) {
+      console.error("Error updating quantity:", error);
+    }
+  };
+
+  if (!isClient) return null;
   if (loading) return <p>Loading cart...</p>;
-  if (!cart) return <p>Your cart is empty.</p>;
+  if (!cart || !cart.lines?.edges.length) return <p>Your cart is empty.</p>;
 
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-4">Shopping Cart</h1>
-      {cart.lines.edges.length === 0 ? (
-        <p>Your cart is empty.</p>
-      ) : (
-        <div className="space-y-4">
-          {cart.lines.edges.map(({ node }: any) => (
+      <div className="space-y-4">
+        {cart.lines.edges.map(({ node }: any) => {
+          const product = node.merchandise?.product || {}; // Ensure product exists
+          const featuredImage = product.featuredImage || {}; // Ensure featuredImage exists
+          const title = product.title || "Unknown Product"; // Fallback for title
+          const variantTitle = node.merchandise?.title || "No Variant"; // Fallback for variant title
+          const price = node.merchandise?.priceV2?.amount || "0.00"; // Fallback for price
+
+          return (
             <div key={node.id} className="flex items-center border p-4 rounded-md">
-              <img
-                src={node.merchandise.product.featuredImage?.url}
-                alt={node.merchandise.product.title}
-                className="w-20 h-20 object-cover mr-4"
-              />
+              {featuredImage.url ? (
+                <img
+                  src={featuredImage.url}
+                  alt={title}
+                  className="w-20 h-20 object-cover mr-4"
+                />
+              ) : (
+                <div className="w-20 h-20 bg-gray-200 flex items-center justify-center text-sm">
+                  No Image
+                </div>
+              )}
               <div className="flex-1">
-                <h2 className="text-lg font-semibold">{node.merchandise.product.title}</h2>
-                <p className="text-gray-600">{node.merchandise.title}</p>
-                <p className="font-bold">${node.merchandise.priceV2.amount}</p>
+                <h2 className="text-lg font-semibold">{title}</h2>
+                <p className="text-gray-600">{variantTitle}</p>
+                <p className="font-bold">${price}</p>
               </div>
-              <p className="text-gray-800">Qty: {node.quantity}</p>
+              <div className="flex items-center">
+                <button 
+                  onClick={() => handleQuantityChange(node.id, node.quantity - 1)} 
+                  className="px-3 py-1 bg-gray-300 rounded-md"
+                >
+                  -
+                </button>
+                <span className="mx-2">{node.quantity}</span>
+                <button 
+                  onClick={() => handleQuantityChange(node.id, node.quantity + 1)} 
+                  className="px-3 py-1 bg-gray-300 rounded-md"
+                >
+                  +
+                </button>
+              </div>
             </div>
-          ))}
-        </div>
-      )}
+          );
+        })}
+      </div>
       <h2 className="text-2xl font-bold mt-6">
-        Total: ${cart.cost.totalAmount.amount} {cart.cost.totalAmount.currencyCode}
+        Total: ${cart.cost?.totalAmount?.amount || "0.00"} {cart.cost?.totalAmount?.currencyCode || ""}
       </h2>
     </div>
   );
