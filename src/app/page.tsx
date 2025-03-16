@@ -6,6 +6,7 @@ import { getProducts } from "@/lib/product";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import LoadingOverlay from "@/components/LoadingOverlay";
+import Image from "next/image";
 
 export default function Home() {
   const searchParams = useSearchParams();
@@ -68,11 +69,14 @@ export default function Home() {
               className="bg-white shadow-lg rounded-lg overflow-hidden border hover:shadow-xl transition-shadow duration-300"
             >
               <Link href={`/product/${product.node.id.split("/").pop()}`}>
-                <img
-                  src={product.node.featuredImage.url}
-                  alt={product.node.title}
-                  className="w-full h-56 object-cover cursor-pointer"
-                />
+              <Image
+                src={product.node.featuredImage.url}
+                alt={product.node.title}
+                width={224}
+                height={224}
+                className="w-full h-56 object-cover cursor-pointer"
+                priority
+              />
               </Link>
               <div className="p-4">
                 <Link href={`/product/${product.node.id.split("/").pop()}`}>

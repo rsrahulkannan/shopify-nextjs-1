@@ -1,6 +1,7 @@
 import AddToCartButton from "../../../components/AddToCartButton";
 import Navbar from "@/components/Navbar";
 import { getProductById } from "@/lib/product";
+import Image from "next/image";
 
 export default async function ProductPage({ params }: { params: { id: string } }) {
   const product = await getProductById(params.id);
@@ -14,10 +15,13 @@ export default async function ProductPage({ params }: { params: { id: string } }
         <div className="max-w-6xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden border">
           <div className="flex flex-col md:flex-row">
             <div className="md:w-1/2 p-6">
-              <img
+              <Image
+                width={224}
+                height={224}
                 src={product.data.product.featuredImage?.url}
                 alt={product.data.product.title}
                 className="w-50 h-auto object-cover rounded-lg"
+                priority
               />
             </div>
 

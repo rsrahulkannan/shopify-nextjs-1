@@ -5,6 +5,7 @@ import CheckoutButton from "../../components/CheckoutButton";
 import Navbar from "../../components/Navbar";
 import LoadingOverlay from "../../components/LoadingOverlay";
 import { getCart, removeFromCart, updateCartQuantity } from "@/lib/cart";
+import Image from "next/image";
 
 export default function CartPage() {
   const [cart, setCart] = useState<any>(null);
@@ -82,10 +83,13 @@ export default function CartPage() {
                 >
                   <div className="flex items-center flex-1">
                     {featuredImage.url ? (
-                      <img
+                      <Image
+                        width={224}
+                        height={224}
                         src={featuredImage.url}
                         alt={title}
                         className="w-20 h-20 object-cover rounded-lg mr-4"
+                        priority
                       />
                     ) : (
                       <div className="w-20 h-20 bg-gray-200 flex items-center justify-center text-sm rounded-lg">
