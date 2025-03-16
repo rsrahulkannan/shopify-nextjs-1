@@ -4,7 +4,7 @@ const apiVersion = process.env.NEXT_PUBLIC_SHOPIFY_API_VERSION;
 
 export async function getProducts({
   searchQuery,
-  first = 2,
+  first = 8,
   last,
   after,
   before,
@@ -93,15 +93,15 @@ export async function getProducts({
 }
 
 function buildQueryString({ searchQuery }: { searchQuery?: string }) {
-    const queryParts = [];
-    if (searchQuery) {
-        queryParts.push(`title:${searchQuery}* OR description:${searchQuery}*`);
-    }
-    return queryParts.join(' AND ');
+  const queryParts = [];
+  if (searchQuery) {
+    queryParts.push(`title:${searchQuery}* OR description:${searchQuery}*`);
+  }
+  return queryParts.join(' AND ');
 }
 
 export async function getProductById(id: string) {
-    const query = `
+  const query = `
     {
         product(id: "gid://shopify/Product/${id}") {
             id
@@ -135,19 +135,19 @@ export async function getProductById(id: string) {
         }
     }`;
 
-    const response = await fetch(`https://${domain}/api/${apiVersion}/graphql.json`, {
-        method: "POST",
-        headers: {
-            "X-Shopify-Storefront-Access-Token": accessToken as string,
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ query }),
-    });
+  const response = await fetch(`https://${domain}/api/${apiVersion}/graphql.json`, {
+    method: "POST",
+    headers: {
+      "X-Shopify-Storefront-Access-Token": accessToken as string,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ query }),
+  });
 
-    if (!response.ok) {
-        throw new Error(`Shopify API request failed: ${response.statusText}`);
-    }
+  if (!response.ok) {
+    throw new Error(`Shopify API request failed: ${response.statusText}`);
+  }
 
-    const jsonResponse = await response.json();
-    return jsonResponse;
+  const jsonResponse = await response.json();
+  return jsonResponse;
 }
