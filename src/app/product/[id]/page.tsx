@@ -1,6 +1,6 @@
+// app/product/[id]/page.tsx
 import AddToCartButton from "../../../components/AddToCartButton";
-import Link from "next/link";
-import CartButton from "@/components/CartButton";
+import Navbar from "@/components/Navbar"; // Import Navbar
 import { getProductById } from "@/lib/product";
 
 export default async function ProductPage({ params }: { params: { id: string } }) {
@@ -8,34 +8,47 @@ export default async function ProductPage({ params }: { params: { id: string } }
   if (!product?.data?.product) return <p>Product not found</p>;
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-8">
-        <Link href="/">
-          <h1 className="text-3xl font-bold text-gray-800">Shopify Store</h1>
-        </Link>
-        <h1 className="text-3xl font-bold mb-4">Detail View</h1>
-        <CartButton />
-      </div>
-    <div className="container mx-auto px-4 py-8">
-      <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden border">
-        <img src={product.data.product.featuredImage?.url} alt={product.data.product.title} className="w-50 h-50 object-cover" />
-        <div className="p-6">
-          <h1 className="text-3xl font-bold text-gray-900">{product.data.product.title}</h1>
-          <p className="text-gray-700 mt-4">{product.data.product.description}</p>
-          <div className="flex items-center mt-2">
-            <p className="text-md font-bold text-gray-800">
-              ${product.data.product.priceRange.minVariantPrice.amount}
-            </p>
-            {product.data.product.variants.edges[0]?.node.compareAtPrice?.amount && (
-              <p className="text-sm text-gray-500 line-through ml-2">
-                ${product.data.product.variants.edges[0].node.compareAtPrice.amount}
-              </p>
-            )}
+    <div>
+      {/* Navbar */}
+      <Navbar />
+
+      {/* Product Detail Section */}
+      <div className="container mx-auto px-4 py-24">
+        <div className="max-w-6xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden border">
+          <div className="flex flex-col md:flex-row">
+            {/* Image Section (Left) */}
+            <div className="md:w-1/2 p-6">
+              <img
+                src={product.data.product.featuredImage?.url}
+                alt={product.data.product.title}
+                className="w-50 h-auto object-cover rounded-lg"
+              />
+            </div>
+
+            {/* Details Section (Right) */}
+            <div className="md:w-1/2 p-6 flex flex-col justify-center">
+              <h1 className="text-3xl font-bold text-gray-900 mb-4">{product.data.product.title}</h1>
+              <div className="flex items-center mb-4">
+                <p className="text-2xl font-bold text-gray-800">
+                  ${product.data.product.priceRange.minVariantPrice.amount}
+                </p>
+                {product.data.product.variants.edges[0]?.node.compareAtPrice?.amount && (
+                  <p className="text-lg text-gray-500 line-through ml-4">
+                    ${product.data.product.variants.edges[0].node.compareAtPrice.amount}
+                  </p>
+                )}
+              </div>
+              <AddToCartButton productId={product.data.product.variants.edges[0]?.node.id} />
+            </div>
           </div>
-          <AddToCartButton productId={product.data.product.variants.edges[0]?.node.id} />
+
+          {/* Description Section (Bottom) */}
+          <div className="p-6 border-t border-gray-200">
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">Description</h2>
+            <p className="text-gray-700">{product.data.product.description}</p>
+          </div>
         </div>
       </div>
-    </div>
     </div>
   );
 }
