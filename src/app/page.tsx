@@ -90,7 +90,16 @@ export default function Home() {
                 </h2>
               </Link>
               <p className="text-sm text-gray-600 mt-2 line-clamp-2">{product.node.description}</p>
-              <p className="text-md font-bold text-gray-800 mt-2">${product.node.priceRange.minVariantPrice.amount}</p>
+              <div className="flex items-center mt-2">
+                <p className="text-md font-bold text-gray-800">
+                  ${product.node.priceRange.minVariantPrice.amount}
+                </p>
+                {product.node.variants.edges[0]?.node.compareAtPrice?.amount && (
+                  <p className="text-sm text-gray-500 line-through ml-2">
+                    ${product.node.variants.edges[0].node.compareAtPrice.amount}
+                  </p>
+                )}
+              </div>
               <AddToCartButton productId={product.node.variants.edges[0]?.node.id} />
             </div>
           </div>

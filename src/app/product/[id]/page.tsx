@@ -22,9 +22,16 @@ export default async function ProductPage({ params }: { params: { id: string } }
         <div className="p-6">
           <h1 className="text-3xl font-bold text-gray-900">{product.data.product.title}</h1>
           <p className="text-gray-700 mt-4">{product.data.product.description}</p>
-          <p className="text-lg font-bold text-gray-800 mt-2">
-            ${product.data.product.priceRange.minVariantPrice.amount}
-          </p>
+          <div className="flex items-center mt-2">
+            <p className="text-md font-bold text-gray-800">
+              ${product.data.product.priceRange.minVariantPrice.amount}
+            </p>
+            {product.data.product.variants.edges[0]?.node.compareAtPrice?.amount && (
+              <p className="text-sm text-gray-500 line-through ml-2">
+                ${product.data.product.variants.edges[0].node.compareAtPrice.amount}
+              </p>
+            )}
+          </div>
           <AddToCartButton productId={product.data.product.variants.edges[0]?.node.id} />
         </div>
       </div>

@@ -42,6 +42,14 @@ export async function getProducts({
                 edges {
                   node {
                     id
+                    price {
+                      amount
+                      currencyCode
+                    }
+                    compareAtPrice {
+                      amount
+                      currencyCode
+                    }
                   }
                 }
               }
@@ -72,7 +80,6 @@ export async function getProducts({
 
   const jsonResponse = await response.json();
 
-  // Check for errors in the response
   if (jsonResponse.errors) {
     console.error("GraphQL Errors:", jsonResponse.errors);
     throw new Error(jsonResponse.errors.map((err: any) => err.message).join(", "));
@@ -113,6 +120,14 @@ export async function getProductById(id: string) {
                 edges {
                   node {
                     id
+                    price {
+                      amount
+                      currencyCode
+                    }
+                    compareAtPrice {
+                      amount
+                      currencyCode
+                    }
                   }
                 }
               }
