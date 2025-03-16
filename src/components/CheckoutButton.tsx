@@ -2,9 +2,11 @@
 import { useCart } from "@/context/CartContext";
 import { getCart } from "@/lib/cart";
 import { createCheckout } from "@/lib/checkout";
+import { useTranslations } from "next-intl";
 
 export default function CheckoutButton() {
   const { cartCount } = useCart();
+  const t = useTranslations("Product");
 
   const handleCheckout = async () => {
     try {
@@ -36,7 +38,7 @@ export default function CheckoutButton() {
       disabled={cartCount === 0}
       className="mt-6 w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed"
     >
-      Proceed to Checkout
+      {t('checkout')}
     </button>
   );
 }

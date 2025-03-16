@@ -1,0 +1,18 @@
+{
+  "Product": {
+    "title": "Shopify Store",
+    "next": "Next",
+    "prev": "Prev",
+    "addCart": "Add to Cart",
+    "search": "Search Products...",
+    "description": "Description",
+    "total": "Total:",
+    "checkout": "Proceed to Checkout",
+    "noImage": "No Image",
+    "empty": "Your cart is empty."
+  },
+  "Language": {
+    "en": "English",
+    "de": "German"
+  }
+}

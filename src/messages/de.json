@@ -1,0 +1,18 @@
+{
+  "Product": {
+    "title": "Shopify-Shop",
+    "next": "Nächste",
+    "prev": "Vorher",
+    "addCart": "in den Warenkorb legen",
+    "search": "Produkte suchen...",
+    "description": "Beschreibung",
+    "total": "Gesamt:",
+    "checkout": "Zur Kasse gehen",
+    "noImage": "Kein Bild",
+    "empty": "Ihr Warenkorb ist leer."
+  },
+  "Language": {
+    "en": "Englisch",
+    "de": "Deutsch"
+  }
+}

@@ -1,4 +1,4 @@
-import AddToCartButton from "../../../components/AddToCartButton";
+import AddToCartButton from "../../../../components/AddToCartButton";
 import Navbar from "@/components/Navbar";
 import { getProductById } from "@/lib/product";
 import Image from "next/image";

@@ -1,12 +1,13 @@
 "use client";
 import Link from "next/link";
-import AddToCartButton from "../components/AddToCartButton";
-import Navbar from "../components/Navbar";
+import AddToCartButton from "../../components/AddToCartButton";
+import Navbar from "../../components/Navbar";
 import { getProducts } from "@/lib/product";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import LoadingOverlay from "@/components/LoadingOverlay";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 export default function Home() {
   const searchParams = useSearchParams();
@@ -16,6 +17,8 @@ export default function Home() {
   const [pageInfo, setPageInfo] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const t = useTranslations('Product');
 
   const fetchProducts = async (after?: string, before?: string, isNewPage: boolean = false) => {
     setLoading(true);
@@ -88,11 +91,11 @@ export default function Home() {
                 <p className="text-sm text-gray-600 mt-2 line-clamp-2">{product.node.description}</p>
                 <div className="flex items-center mt-2">
                   <p className="text-md font-bold text-gray-800">
-                    ${product.node.priceRange.minVariantPrice.amount}
+                    {product.node.priceRange.minVariantPrice.amount}
                   </p>
                   {product.node.variants.edges[0]?.node.compareAtPrice?.amount && (
                     <p className="text-sm text-gray-500 line-through ml-2">
-                      ${product.node.variants.edges[0].node.compareAtPrice.amount}
+                      {product.node.variants.edges[0].node.compareAtPrice.amount}
                     </p>
                   )}
                 </div>
@@ -108,14 +111,14 @@ export default function Home() {
             disabled={!pageInfo?.hasPreviousPage || !pageInfo.startCursor || loading}
             className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
           >
-            Previous
+            {t('prev')}
           </button>
           <button
             onClick={handleNextPage}
             disabled={!pageInfo?.hasNextPage || !pageInfo.endCursor || loading}
             className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
           >
-            Next
+            {t('next')}
           </button>
         </div>
       </div>

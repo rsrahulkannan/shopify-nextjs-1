@@ -1,9 +1,11 @@
 "use client";
 import { useCart } from "@/context/CartContext";
 import { createCart, updateCart } from "@/lib/cart";
+import { useTranslations } from "next-intl";
 
 export default function AddToCartButton({ productId }: { productId: string }) {
   const { updateCartCount } = useCart();
+  const t = useTranslations("Product");
 
   const handleAddToCart = async () => {
     try {
@@ -29,7 +31,7 @@ export default function AddToCartButton({ productId }: { productId: string }) {
       className="mt-4 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
       onClick={handleAddToCart}
     >
-      Add to Cart
+      {t('addCart')}
     </button>
   );
 }

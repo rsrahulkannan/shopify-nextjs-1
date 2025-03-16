@@ -1,16 +1,19 @@
 "use client";
 import { useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
-import CheckoutButton from "../../components/CheckoutButton";
-import Navbar from "../../components/Navbar";
-import LoadingOverlay from "../../components/LoadingOverlay";
+import CheckoutButton from "../../../components/CheckoutButton";
+import Navbar from "../../../components/Navbar";
+import LoadingOverlay from "../../../components/LoadingOverlay";
 import { getCart, removeFromCart, updateCartQuantity } from "@/lib/cart";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 export default function CartPage() {
   const [cart, setCart] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [isClient, setIsClient] = useState(false);
+
+  const t = useTranslations("Product");
 
   useEffect(() => {
     setIsClient(true);
@@ -60,7 +63,7 @@ export default function CartPage() {
 
   if (!isClient) return null;
   if (loading) return <LoadingOverlay />;
-  if (!cart || !cart.lines?.edges.length) return <p>Your cart is empty.</p>;
+  if (!cart || !cart.lines?.edges.length) return <p>{t('empty')}</p>;
 
   return (
     <div>
@@ -93,12 +96,12 @@ export default function CartPage() {
                       />
                     ) : (
                       <div className="w-20 h-20 bg-gray-200 flex items-center justify-center text-sm rounded-lg">
-                        No Image
+                        {t('noImage')}
                       </div>
                     )}
                     <div className="flex-1">
                       <h2 className="text-lg font-semibold">{title}</h2>
-                      <p className="font-bold">${price}</p>
+                      <p className="font-bold">{price}</p>
                     </div>
                   </div>
 
@@ -133,7 +136,7 @@ export default function CartPage() {
           <div className="w-full lg:w-1/4">
             <div className="p-6 bg-white shadow-lg rounded-lg">
               <h2 className="text-2xl font-bold">
-                Total: ${cart.cost?.totalAmount?.amount || "0.00"} {cart.cost?.totalAmount?.currencyCode || ""}
+              {t('total')} {cart.cost?.totalAmount?.amount || "0.00"} {cart.cost?.totalAmount?.currencyCode || ""}
               </h2>
               <div className="mt-4">
                 <CheckoutButton />
