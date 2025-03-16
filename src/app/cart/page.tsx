@@ -89,7 +89,7 @@ export default function CartPage() {
                         src={featuredImage.url}
                         alt={title}
                         className="w-20 h-20 object-cover rounded-lg mr-4"
-                        priority
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       />
                     ) : (
                       <div className="w-20 h-20 bg-gray-200 flex items-center justify-center text-sm rounded-lg">

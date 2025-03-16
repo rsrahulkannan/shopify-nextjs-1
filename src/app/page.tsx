@@ -75,7 +75,8 @@ export default function Home() {
                 width={224}
                 height={224}
                 className="w-full h-56 object-cover cursor-pointer"
-                priority
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                priority={products.indexOf(product) < 4}
               />
               </Link>
               <div className="p-4">
