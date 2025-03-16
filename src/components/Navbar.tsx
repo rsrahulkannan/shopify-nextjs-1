@@ -1,24 +1,22 @@
 "use client";
 import Link from "next/link";
-import { useRouter, usePathname } from "next/navigation";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 import CartButton from "./CartButton";
 import { useTranslations } from "next-intl";
+import { routing } from "@/i18n/routing";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function Navbar() {
     const t = useTranslations('Product');
+    const l = useTranslations('Language');
     const router = useRouter();
-    const pathname = usePathname();
     const [searchInput, setSearchInput] = useState("");
+    const { language, setLanguage } = useLanguage(); 
 
     const handleSearch = (term: string) => {
         setSearchInput(term);
         router.push(`/?search=${encodeURIComponent(term)}`);
-    };
-
-    const handleLanguageChange = (lang: string) => {
-        const newPath = `/${lang}${pathname.replace(/^\/(en|de)/, '')}`;
-        router.push(newPath);
     };
 
     return (
@@ -36,11 +34,15 @@ export default function Navbar() {
                         className="w-48 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
                     />
                     <select
-                        onChange={(e) => handleLanguageChange(e.target.value)}
+                        value={language}
+                        onChange={(e) => setLanguage(e.target.value)}
                         className="px-2 py-1 border border-gray-300 rounded-md"
                     >
-                        <option value="en">English</option>
-                        <option value="de">German</option>
+                        {routing.locales.map((locale) => (
+                            <option value={locale} key={locale}>
+                                {l(`${locale}`)}
+                            </option>
+                        ))}
                     </select>
                     <CartButton />
                 </div>
