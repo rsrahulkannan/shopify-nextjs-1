@@ -7,7 +7,7 @@ export default function CartButton() {
   const { cartCount } = useCart();
 
   return (
-    <Link href="/cart">
+    <Link href="/cart" className="px-4">
       <div className="relative cursor-pointer">
         <FaShoppingCart className="text-2xl text-gray-800 hover:text-blue-600" />
         <span className="absolute top-0 right-0 bg-blue-600 text-white text-xs rounded-full px-1.5 py-0.5">

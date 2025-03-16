@@ -12,7 +12,7 @@ export default async function ProductPage({ params }: { params: { id: string } }
       <Navbar />
 
       <div className="container mx-auto px-4 py-24">
-        <div className="max-w-6xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden border">
+        <div className="max-w-6xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden border  mt-8">
           <div className="flex flex-col md:flex-row">
             <div className="md:w-1/2 p-6">
               <Image

@@ -69,7 +69,7 @@ export default function CartPage() {
       <Navbar />
       <div className="container mx-auto px-4 py-24">
         {cart && cart.lines?.edges.length ? (
-          <div className="flex flex-col lg:flex-row gap-8">
+          <div className="flex flex-col lg:flex-row gap-8 mt-8">
             <div className="flex-1 space-y-4">
               {cart.lines.edges.map(({ node }: any) => {
                 const product = node.merchandise?.product || {};
