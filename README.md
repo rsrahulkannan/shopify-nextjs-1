@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Shopify Store
 
-## Getting Started
+A simple Shopify storefront application with product listing, filtering, pagination, cart management, and checkout functionality.
 
-First, run the development server:
+## Installation
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Follow these steps to set up the project:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. **Download the ZIP file** and extract it.
+2. Open a terminal and navigate to the project directory:
+   ```bash
+   cd your_project_directory
+   ```
+3. Install the dependencies using npm:
+   ```bash
+    npm install
+   ```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Configuration
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Copy the env_demo file and rename it to .env.local:
+   ```bash
+   cp .env_demo .env.local
+   ```
+2. Open .env.local and update the required details:
+- Storefront API Key
+- Store URL
+- Site URL
+- Site Title
+- Site Description
 
-## Learn More
+## Running the Development Server
 
-To learn more about Next.js, take a look at the following resources:
+1. Start the server using the following command:
+   ```bash
+    npm run dev
+   ```
+2. Once the server is running, open your browser and navigate to the provided local URL.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Features
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Product Listing
 
-## Deploy on Vercel
+- View a list of products with pagination.
+- Use the filter options in the navbar to refine product searches.
+- Click the Add to Cart button to add a product to the cart.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Product Detail View
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Click on a product image or name to view detailed information.
+- The detail view includes an Add to Cart button.
+
+### Cart Management
+
+- Click the Cart Icon in the navbar to view the cart.
+- Update product quantities or remove items from the cart.
+- Proceed to checkout, which redirects to the Shopify checkout page.
+
+### Localization
+
+- The application supports internationalization using i18n for multi-language support.
+
+### Deployment
+
+- To deploy the application, follow the recommended steps based on your hosting provider.

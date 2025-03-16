@@ -1,0 +1,6 @@
+NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN='********************'
+NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN='*********.myshopify.com'
+NEXT_PUBLIC_SHOPIFY_API_VERSION=2025-01
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+NEXT_PUBLIC_SITE_TITLE="NextJS E-commerce with Shopify"
+NEXT_PUBLIC_SITE_DESCRIPTION="Shop the latest products at the best prices."
