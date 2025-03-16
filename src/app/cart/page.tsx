@@ -1,9 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
-import Link from "next/link";
-import CartButton from "../../components/CartButton";
 import CheckoutButton from "../../components/CheckoutButton";
+import Navbar from "../../components/Navbar";
+import LoadingOverlay from "../../components/LoadingOverlay";
 import { getCart, removeFromCart, updateCartQuantity } from "@/lib/cart";
 
 export default function CartPage() {
@@ -58,73 +58,86 @@ export default function CartPage() {
   };
 
   if (!isClient) return null;
-  if (loading) return <p>Loading cart...</p>;
+  if (loading) return <LoadingOverlay />;
   if (!cart || !cart.lines?.edges.length) return <p>Your cart is empty.</p>;
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-8">
-        <Link href="/">
-          <h1 className="text-3xl font-bold text-gray-800">Shopify Store</h1>
-        </Link>
-        <h1 className="text-3xl font-bold mb-4">My Cart</h1>
-        <CartButton />
-      </div>
-      <div className="space-y-4">
-        {cart.lines.edges.map(({ node }: any) => {
-          const product = node.merchandise?.product || {};
-          const featuredImage = product.featuredImage || {}; 
-          const title = product.title || "Unknown Product";
-          const variantTitle = node.merchandise?.title || "No Variant";
-          const price = node.merchandise?.priceV2?.amount || "0.00";
+    <div>
+      <Navbar />
 
-          return (
-            <div key={node.id} className="flex items-center border p-4 rounded-md">
-              {featuredImage.url ? (
-                <img
-                  src={featuredImage.url}
-                  alt={title}
-                  className="w-20 h-20 object-cover mr-4"
-                />
-              ) : (
-                <div className="w-20 h-20 bg-gray-200 flex items-center justify-center text-sm">
-                  No Image
+      <div className="container mx-auto px-4 py-24">
+        <div className="flex flex-col lg:flex-row gap-8">
+          <div className="flex-1 space-y-4">
+            {cart.lines.edges.map(({ node }: any) => {
+              const product = node.merchandise?.product || {};
+              const featuredImage = product.featuredImage || {};
+              const title = product.title || "Unknown Product";
+              const variantTitle = node.merchandise?.title || "No Variant";
+              const price = node.merchandise?.priceV2?.amount || "0.00";
+
+              return (
+                <div
+                  key={node.id}
+                  className="flex flex-col sm:flex-row items-center justify-between bg-white shadow-lg rounded-lg p-4 hover:shadow-xl transition-shadow duration-300"
+                >
+                  <div className="flex items-center flex-1">
+                    {featuredImage.url ? (
+                      <img
+                        src={featuredImage.url}
+                        alt={title}
+                        className="w-20 h-20 object-cover rounded-lg mr-4"
+                      />
+                    ) : (
+                      <div className="w-20 h-20 bg-gray-200 flex items-center justify-center text-sm rounded-lg">
+                        No Image
+                      </div>
+                    )}
+                    <div className="flex-1">
+                      <h2 className="text-lg font-semibold">{title}</h2>
+                      <p className="font-bold">${price}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center mt-4 sm:mt-0">
+                    <div className="flex items-center border border-gray-300 rounded-md">
+                      <button
+                        onClick={() => handleQuantityChange(node.id, node.quantity - 1)}
+                        className="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-l-md"
+                      >
+                        -
+                      </button>
+                      <span className="px-3 py-1 border-x border-gray-300">{node.quantity}</span>
+                      <button
+                        onClick={() => handleQuantityChange(node.id, node.quantity + 1)}
+                        className="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-r-md"
+                      >
+                        +
+                      </button>
+                    </div>
+                    <button
+                      onClick={() => handleRemoveFromCart(node.id)}
+                      className="ml-4 px-3 py-2 text-red-500 rounded-md transition-colors duration-300"
+                    >
+                      <FaTrash />
+                    </button>
+                  </div>
                 </div>
-              )}
-              <div className="flex-1">
-                <h2 className="text-lg font-semibold">{title}</h2>
-                <p className="text-gray-600">{variantTitle}</p>
-                <p className="font-bold">${price}</p>
-              </div>
-              <div className="flex items-center">
-                <button 
-                  onClick={() => handleQuantityChange(node.id, node.quantity - 1)} 
-                  className="px-3 py-1 bg-gray-300 rounded-md"
-                >
-                  -
-                </button>
-                <span className="mx-2">{node.quantity}</span>
-                <button 
-                  onClick={() => handleQuantityChange(node.id, node.quantity + 1)} 
-                  className="px-3 py-1 bg-gray-300 rounded-md"
-                >
-                  +
-                </button>
-                <button
-                  onClick={() => handleRemoveFromCart(node.id)}
-                  className="ml-4 px-3 py-2 bg-red-800 text-white rounded-md hover:bg-red-600"
-                >
-                  <FaTrash />
-                </button>
+              );
+            })}
+          </div>
+
+          <div className="w-full lg:w-1/4">
+            <div className="p-6 bg-white shadow-lg rounded-lg">
+              <h2 className="text-2xl font-bold">
+                Total: ${cart.cost?.totalAmount?.amount || "0.00"} {cart.cost?.totalAmount?.currencyCode || ""}
+              </h2>
+              <div className="mt-4">
+                <CheckoutButton />
               </div>
             </div>
-          );
-        })}
+          </div>
+        </div>
       </div>
-      <h2 className="text-2xl font-bold mt-6">
-        Total: ${cart.cost?.totalAmount?.amount || "0.00"} {cart.cost?.totalAmount?.currencyCode || ""}
-      </h2>
-      <CheckoutButton />
     </div>
   );
 }

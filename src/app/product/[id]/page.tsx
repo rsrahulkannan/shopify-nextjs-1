@@ -1,6 +1,5 @@
-// app/product/[id]/page.tsx
 import AddToCartButton from "../../../components/AddToCartButton";
-import Navbar from "@/components/Navbar"; // Import Navbar
+import Navbar from "@/components/Navbar";
 import { getProductById } from "@/lib/product";
 
 export default async function ProductPage({ params }: { params: { id: string } }) {
@@ -9,14 +8,11 @@ export default async function ProductPage({ params }: { params: { id: string } }
 
   return (
     <div>
-      {/* Navbar */}
       <Navbar />
 
-      {/* Product Detail Section */}
       <div className="container mx-auto px-4 py-24">
         <div className="max-w-6xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden border">
           <div className="flex flex-col md:flex-row">
-            {/* Image Section (Left) */}
             <div className="md:w-1/2 p-6">
               <img
                 src={product.data.product.featuredImage?.url}
@@ -25,7 +21,6 @@ export default async function ProductPage({ params }: { params: { id: string } }
               />
             </div>
 
-            {/* Details Section (Right) */}
             <div className="md:w-1/2 p-6 flex flex-col justify-center">
               <h1 className="text-3xl font-bold text-gray-900 mb-4">{product.data.product.title}</h1>
               <div className="flex items-center mb-4">
@@ -42,7 +37,6 @@ export default async function ProductPage({ params }: { params: { id: string } }
             </div>
           </div>
 
-          {/* Description Section (Bottom) */}
           <div className="p-6 border-t border-gray-200">
             <h2 className="text-xl font-semibold text-gray-900 mb-2">Description</h2>
             <p className="text-gray-700">{product.data.product.description}</p>
