@@ -73,7 +73,7 @@ export default function Home() {
             >
               <Link href={`/product/${product.node.id.split("/").pop()}`}>
               <Image
-                src={product.node.featuredImage.url}
+                src={product.node.featuredImage?.url ? product.node.featuredImage?.url : "/no-image.jpeg"}
                 alt={product.node.title}
                 width={224}
                 height={224}

@@ -18,7 +18,7 @@ export default async function ProductPage({ params }: { params: { id: string } }
               <Image
                 width={224}
                 height={224}
-                src={product.data.product.featuredImage?.url}
+                src={product.data.product.featuredImage?.url ? product.data.product.featuredImage?.url : "/no-image.jpeg"}
                 alt={product.data.product.title}
                 className="w-50 h-auto object-cover rounded-lg"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
